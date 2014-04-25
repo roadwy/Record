@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<DEFECTS>
+<OACRDEFECTCOUNT>1</OACRDEFECTCOUNT>
+<OACRERRORCOUNT>0</OACRERRORCOUNT>
+<DEFECT _seq="1"><OACRCOMPUNIT>c:\project\drivers\iatgate\main.c</OACRCOMPUNIT><SFA><LINE>1</LINE><COLUMN>0</COLUMN><FILENAME>main.c</FILENAME><FILEPATH>c:\project\drivers\iatgate\</FILEPATH></SFA><DEFECTCODE>20051</DEFECTCODE><DESCRIPTION>PREfast - Error processing 'main.c' (try ' oacr log root:x86fre ' for details)</DESCRIPTION><FUNCTION></FUNCTION><FUNCLINE></FUNCLINE><PATH/></DEFECT>
+</DEFECTS>
