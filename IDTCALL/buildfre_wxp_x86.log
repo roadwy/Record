@@ -1,20 +1,18 @@
 BUILD: Computing Include file dependencies:
-BUILD: null byte at offset 0x00000003
-BUILD: 2047 null bytes in file
-BUILD: Examining c:\project\drivers\iatgate directory for files to compile.
+BUILD: Examining c:\project\drivers\idtcall directory for files to compile.
 oacr invalidate root:x86fre /autocleanqueue
-1>Compiling and Linking c:\project\drivers\iatgate *************
+1>Compiling and Linking c:\project\drivers\idtcall *************
 1>'nmake.exe /nologo BUILDMSG=Stop. -i BUILD_PASS=PASS2 LINKONLY=1 NOPASS0=1 MAKEDIR_RELATIVE_TO_BASEDIR='
-1>c:\project\drivers\iatgate: TARGETPATH is obj
+1>c:\project\drivers\idtcall: TARGETPATH is obj
 1>BUILDMSG: _NT_TARGET_VERSION SET TO WINXP
-1> C:\WinDDK\7600.16385.1\Bin\x86\oacr\oacrcl @c:\project\drivers\iatgate\objfre_wxp_x86\i386\cl.rsp
+1> C:\WinDDK\7600.16385.1\Bin\x86\oacr\oacrcl @c:\project\drivers\idtcall\objfre_wxp_x86\i386\cl.rsp
 1>Microsoft (R) 32-bit C/C++ Optimizing Compiler Version 15.00.30729.207 for 80x86
 1>Copyright (C) Microsoft Corporation.  All rights reserved.
-1>cl /Fo"c:\project\drivers\iatgate\objfre_wxp_x86\i386/"
+1>cl /Fo"c:\project\drivers\idtcall\objfre_wxp_x86\i386/"
 1> /FC
 1> /Ii386
 1> /I.
-1> /Ic:\project\drivers\iatgate\objfre_wxp_x86\i386
+1> /Ic:\project\drivers\idtcall\objfre_wxp_x86\i386
 1> /IC:\WinDDK\7600.16385.1\inc\api
 1> /IC:\WinDDK\7600.16385.1\inc\api
 1> /IC:\WinDDK\7600.16385.1\inc\ddk
@@ -59,7 +57,7 @@ oacr invalidate root:x86fre /autocleanqueue
 1> /Oxs
 1> /Oy-
 1> /Zi
-1> /Fdc:\project\drivers\iatgate\objfre_wxp_x86\i386\
+1> /Fdc:\project\drivers\idtcall\objfre_wxp_x86\i386\
 1> /DKMDF_MAJOR_VERSION_STRING=01
 1> /DKMDF_MINOR_VERSION_STRING=009
 1> /wd4603
@@ -68,7 +66,7 @@ oacr invalidate root:x86fre /autocleanqueue
 1> /FIC:\WinDDK\7600.16385.1\inc\api\warning.h
 1> .\main.c 
 1>main.c
-1> C:\WinDDK\7600.16385.1\Bin\x86\oacr\oacrlink /out:c:\project\drivers\iatgate\objfre_wxp_x86\i386\IATGATE.sys /machine:ix86 @c:\project\drivers\iatgate\objfre_wxp_x86\i386\lnk.rsp
+1> C:\WinDDK\7600.16385.1\Bin\x86\oacr\oacrlink /out:c:\project\drivers\idtcall\objfre_wxp_x86\i386\IDTCALL.sys /machine:ix86 @c:\project\drivers\idtcall\objfre_wxp_x86\i386\lnk.rsp
 1>Microsoft (R) Incremental Linker Version 9.00.30729.207
 1>Copyright (C) Microsoft Corporation.  All rights reserved.
 1>/MERGE:_PAGE=PAGE 
@@ -94,8 +92,8 @@ oacr invalidate root:x86fre /autocleanqueue
 1>/align:0x80 /stub:c:\winddk\7600.16385.1\lib\wxp\stub512.com 
 1>/subsystem:native,5.01 
 1>/entry:GsDriverEntry@8 
-1>/out:c:\project\drivers\iatgate\objfre_wxp_x86\i386\IATGATE.sys 
-1>c:\project\drivers\iatgate\objfre_wxp_x86\i386\main.obj 
+1>/out:c:\project\drivers\idtcall\objfre_wxp_x86\i386\IDTCALL.sys 
+1>c:\project\drivers\idtcall\objfre_wxp_x86\i386\main.obj 
 1>c:\winddk\7600.16385.1\lib\wxp\i386\BufferOverflowK.lib 
 1>c:\winddk\7600.16385.1\lib\wxp\i386\ntoskrnl.lib 
 1>c:\winddk\7600.16385.1\lib\wxp\i386\hal.lib 

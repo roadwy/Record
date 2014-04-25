@@ -2,15 +2,14 @@
 #include "stdio.h"
 
 
-#define DEV_NAME "\\Device\\CALLGATE"
-#define SYM_NAME "\\??\\CALLGATE"
-
 #define GDT_LIMIT 0x3ff
 #define GATE_TYPE 0xEC
 
 typedef unsigned int DWORD;
 typedef unsigned char BYTE;
 typedef unsigned short WORD;
+
+char outString[] = "abcdefg";
 
 int now;
 typedef struct _CALLGATE {
@@ -22,22 +21,34 @@ typedef struct _CALLGATE {
 } CALLGATE, *PCALLGATE;
 
 
-void MyCALLGATE()
+__declspec(naked) void MyCALLGATE()
 {
-	DbgPrint("MyCALLGATE called!\n");
+	__asm {
+		cli;
+		pushad;
+		pushfd;
+		mov eax, offset outString
+		push eax
+		mov eax, 80528e92h;
+		call eax;
+		pop eax
+		popfd;
+		popad;
+		sti;
+		retf;
+	}
 }
 
-NTSTATUS AddCallGate()
+NTSTATUS AddCallGate(DWORD MyCALLGATE)
 {
 	char s[256];
 	char gdt[6];
 	DWORD base; 
 	PCALLGATE pCallGate = NULL;
-	
+
 	now = 8;
 
-	_asm sgdt gdt
-
+	_asm sgdt gdt;
 	base = *(DWORD*)(gdt + 2);
 
 	while (now < GDT_LIMIT)
@@ -52,6 +63,7 @@ NTSTATUS AddCallGate()
 			pCallGate->selector = 0x08;
 			pCallGate->offseth = (WORD)((DWORD)MyCALLGATE >> 16);
 			pCallGate->count = 0;
+			DbgPrint("Add call gate!\n");
 			break;
 		}
 		now += 8;
@@ -66,7 +78,8 @@ void Unload(PDRIVER_OBJECT driver)
 	DWORD base; 
 	PCALLGATE pCallGate = NULL;
 
-	_asm sgdt gdt
+	_asm sgdt gdt;
+	
 	base = *(DWORD*)(gdt + 2);
 	pCallGate = (PCALLGATE)(base + now);
 	pCallGate->type = 0;
@@ -75,7 +88,7 @@ void Unload(PDRIVER_OBJECT driver)
 
 NTSTATUS DriverEntry(IN PDRIVER_OBJECT driver, IN PUNICODE_STRING szReg)
 {
-	AddCallGate();
+	AddCallGate((DWORD)MyCALLGATE);
 	driver->DriverUnload = Unload;
 	return STATUS_SUCCESS;
 }

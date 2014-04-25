@@ -2,8 +2,8 @@
 <VisualStudioProject
 	ProjectType="Visual C++"
 	Version="9.00"
-	Name="IATGATE.WXP"
-	ProjectGUID="{B4FC71E1-2025-42A1-ABCD-9B5A2BF91796}"
+	Name="IDTCALL.WXP"
+	ProjectGUID="{E592DE6E-0497-4A72-A10A-E2EC9A206836}"
 	TargetFrameworkVersion="196613"
 	>
 	<Platforms>
@@ -18,7 +18,7 @@
 			Name="WXP free|Win32"
 			IntermediateDirectory=".\"
 			ConfigurationType="0"
-			InheritedPropertySheets=".\IATGATE.vsprops"
+			InheritedPropertySheets=".\IDTCALL.vsprops"
 			>
 			<Tool
 				Name="VCNMakeTool"
@@ -38,7 +38,7 @@
 			Name="WXP checked|Win32"
 			IntermediateDirectory=".\"
 			ConfigurationType="0"
-			InheritedPropertySheets=".\IATGATE.vsprops"
+			InheritedPropertySheets=".\IDTCALL.vsprops"
 			>
 			<Tool
 				Name="VCNMakeTool"
@@ -56,10 +56,9 @@
 		</Configuration>
 		<Configuration
 			Name="WXP checked (PREfast)|Win32"
-			OutputDirectory="$(SolutionDir)$(ConfigurationName)"
 			IntermediateDirectory=".\"
 			ConfigurationType="0"
-			InheritedPropertySheets=".\IATGATE.vsprops"
+			InheritedPropertySheets=".\IDTCALL.vsprops"
 			>
 			<Tool
 				Name="VCNMakeTool"
@@ -79,7 +78,7 @@
 			Name="WXP2K free|Win32"
 			IntermediateDirectory=".\"
 			ConfigurationType="0"
-			InheritedPropertySheets=".\IATGATE.vsprops"
+			InheritedPropertySheets=".\IDTCALL.vsprops"
 			>
 			<Tool
 				Name="VCNMakeTool"
@@ -99,7 +98,7 @@
 			Name="WXP2K checked|Win32"
 			IntermediateDirectory=".\"
 			ConfigurationType="0"
-			InheritedPropertySheets=".\IATGATE.vsprops"
+			InheritedPropertySheets=".\IDTCALL.vsprops"
 			>
 			<Tool
 				Name="VCNMakeTool"
@@ -119,7 +118,7 @@
 			Name="WXP2K checked (PREfast)|Win32"
 			IntermediateDirectory=".\"
 			ConfigurationType="0"
-			InheritedPropertySheets=".\IATGATE.vsprops"
+			InheritedPropertySheets=".\IDTCALL.vsprops"
 			>
 			<Tool
 				Name="VCNMakeTool"
@@ -175,7 +174,7 @@
 				>
 			</File>
 			<File
-				RelativePath=".\IATGATE.vsprops"
+				RelativePath=".\IDTCALL.vsprops"
 				>
 			</File>
 			<File

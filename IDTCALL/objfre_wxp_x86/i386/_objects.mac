@@ -10,7 +10,7 @@
 # lowercased
 BASEDIR=c:\winddk\7600.16385.1
 OBJECT_ROOT=c:\winddk\7600.16385.1
-MAKEDIR_LOWERCASE=c:\project\drivers\iatgate
-OBJ_PATH=c:\project\drivers\iatgate
+MAKEDIR_LOWERCASE=c:\project\drivers\idtcall
+OBJ_PATH=c:\project\drivers\idtcall
 CONCURRENT_MIDL=0
 CONCURRENT_MANIFEST_BUILD=0
