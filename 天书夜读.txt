@@ -1,4 +1,0 @@
-IoCallDriver
-PsSetCreateProcessNotifyRoutine
-PsSetLoadImageNotifyRoutine
-KiThreadStartup
