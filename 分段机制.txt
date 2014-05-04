@@ -1,0 +1,46 @@
+分段管理机制：
+
+描述符：
+描述一个段的基本信息：段基址、段界限、段属性：
+8个字节，64位
+#pragma pack(1)
+typedef struct _tagDESCRIPTOR
+{
+	unsigned __int64 LIMITL:16;
+	unsigned __int64 BASEL:24;
+	unsigned __int64 TYPE:4;
+	unsigned __int64 DT:1;
+	unsigned __int64 DPL:2;
+	unsigned __int64 p:1;
+	unsigned __int64 LIMITH:16;
+	unsigned __int64 AVL:1;
+	unsigned __int64 ZERO:1;
+	unsigned __int64 D:1;
+	unsigned __int64 G:1;
+	unsigned __int64 BASEH:8;
+} DESCRIPTOR;
+#pragma pack()
+
+
+
+描述符表：
+描述符构成的表，包括GDT，LDT，IDT，每个CPU都有对应的全局描述符表和中断描述符表。
+每个线程有LDT局部描述符表。
+
+存储 描述符表 的特殊数据段最多包含8K即 8192 个描述符
+最大虚拟地址空间为 4GB*8192*2 = 64MMB = 64TB
+
+
+段选择子：
+段描述符在段描述符表中的下标。
+长度 16位
+根据第2位TI位确定是从GDT还是LDT中取值
+第0、1位表示是 ring3 还是 ring0
+段选择子13位作为下标，得到段描述符，段描述符的段基址都是0，即线性地址就是虚拟地址
+
+
+Windows只采用GDT，windbg用dg查看段描述符。
+
+
+全局描述符表寄存器GDTR
+r GDTR
