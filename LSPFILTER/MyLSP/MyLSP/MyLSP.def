@@ -1,0 +1,8 @@
+LIBRARY MyLSP
+
+EXPORTS
+	WSPStartup @ 1
+	WSPSendTo @ 2
+	WSPBind @ 3
+	FreeProvider @ 4
+	GetProvider @ 5
