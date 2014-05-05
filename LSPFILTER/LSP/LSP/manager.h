@@ -40,7 +40,7 @@ void FreeProvider(LPWSAPROTOCOL_INFOW pProtoInfo)
 BOOL InstallProvider(WCHAR *pwszPathName)
 {
 	//LSPµÄÃû×Ö
-	WCHAR wszLSPName[] = L"MyFirstLSP";
+	WCHAR wszLSPName[] = L"MyLSP";
 	LPWSAPROTOCOL_INFOW pProtoInfo;
 	int nProtocols;
 	WSAPROTOCOL_INFOW OriginalProtocolInfo[3];

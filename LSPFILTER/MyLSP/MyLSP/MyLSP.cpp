@@ -3,10 +3,13 @@
 #include <Windows.h>
 #include <tchar.h>
 #include "Debug.h"
+#include <stdio.h>
 #pragma comment(lib, "Ws2_32.lib")
 WSPUPCALLTABLE g_pUpCallTable;		// 上层函数列表。如果LSP创建了自己的伪句柄，使用这个函数列表
 WSPPROC_TABLE g_NextProcTable;		// 下层函数列表
 TCHAR g_szCurrentApp[MAX_PATH];		// 当前调用本DLL的程序的名称
+HANDLE hFile;
+
 BOOL APIENTRY DllMain(HANDLE hModule, DWORD dwReason, LPVOID lpReserved)
 {
 	switch (dwReason)
@@ -14,7 +17,23 @@ BOOL APIENTRY DllMain(HANDLE hModule, DWORD dwReason, LPVOID lpReserved)
 	case DLL_PROCESS_ATTACH:
 		{
 			::GetModuleFileName(NULL, g_szCurrentApp, MAX_PATH);
+			hFile = CreateFile(
+				L"test.txt", 
+				FILE_ALL_ACCESS, 
+				FILE_SHARE_READ, 
+				NULL,
+				OPEN_ALWAYS,
+				0,
+				NULL
+			);
+			break;
 		}
+	case DLL_PROCESS_DETACH:
+		{
+			CloseHandle(hFile);
+			break;
+		}
+	default:
 		break;
 	}
 	return TRUE;
@@ -55,14 +74,16 @@ int WSPAPI WSPSendTo(
 	LPINT    lpErrno
 )
 {
-	ODS1(L" Query send to... %s", g_szCurrentApp);
+	char temp[1024];
+	sprintf(temp, " Query send to... %s", g_szCurrentApp);
+	WriteFile(hFile, (LPCVOID)temp, strlen(temp), NULL, NULL);
 	SOCKADDR_IN sa = *(SOCKADDR_IN*)lpTo;
 	if(sa.sin_port == htons(80))
 	{
 		int iError;
 		g_NextProcTable.lpWSPShutdown(s, SD_BOTH, &iError);
 		*lpErrno = WSAECONNABORTED;
-		ODS(L" deny a sendto ");
+		WriteFile(hFile, "deny a sendto ", sizeof("deny a sendto "), NULL, NULL);
 		return SOCKET_ERROR;
 	}
 	
@@ -83,7 +104,9 @@ int WSPAPI WSPStartup(
 	LPWSPPROC_TABLE lpProcTable
 )
 {
-	ODS1(L" WSPStartup... %s \n", g_szCurrentApp);
+	char temp[1024];
+	sprintf(temp, " WSPStartup... %s \n", g_szCurrentApp);
+	WriteFile(hFile, (LPCVOID)temp, strlen(temp), NULL, NULL);
 	if(lpProtocolInfo->ProtocolChain.ChainLen <= 1)
 	{
 		return WSAEPROVIDERFAILEDINIT;
@@ -107,7 +130,8 @@ int WSPAPI WSPStartup(
 	}
 	if (i >= nTotalProtos)
 	{
-		ODS(L" WSPStartup: Can not find underlying protocol \n");
+		WriteFile(hFile, (LPCVOID)"WSPStartup: Can not find underlying protocol \n", 
+			strlen("WSPStartup: Can not find underlying protocol \n"), NULL, NULL);
 		return WSAEPROVIDERFAILEDINIT;
 	}
 	
@@ -119,12 +143,14 @@ int WSPAPI WSPStartup(
 	// 取得下层提供程序DLL路径
 	if (::WSCGetProviderPath(&NextProtocolInfo.ProviderId, szBaseProviderDll, &nLen, &dwError) == SOCKET_ERROR)
 	{
-		ODS1(L" WSPStartup: WSCGetProviderPath() failed %d \n", dwError);
+		sprintf(temp, " WSPStartup: WSCGetProviderPath() failed %d \n", dwError);
+		WriteFile(hFile, (LPCVOID)temp,strlen(temp), NULL, NULL);
 		return WSAEPROVIDERFAILEDINIT;
 	}
 	if(!::ExpandEnvironmentStrings(szBaseProviderDll, szBaseProviderDll, MAX_PATH))
 	{
-		ODS1(L" WSPStartup: ExpandEnvironmentStrings() failed %d \n", ::GetLastError());
+		sprintf(temp, " WSPStartup: ExpandEnvironmentStrings() failed %d \n", ::GetLastError());
+		WriteFile(hFile, (LPCVOID)temp,strlen(temp), NULL, NULL);
 		return WSAEPROVIDERFAILEDINIT;
 	}
 	
@@ -132,7 +158,8 @@ int WSPAPI WSPStartup(
 	HMODULE hModule = ::LoadLibrary(szBaseProviderDll);
 	if(hModule == NULL)
 	{
-		ODS1(L" WSPStartup: LoadLibrary() failed %d \n", ::GetLastError());
+		sprintf(temp, " WSPStartup: LoadLibrary() failed %d \n", ::GetLastError());
+		WriteFile(hFile, (LPCVOID)temp,strlen(temp), NULL, NULL);
 		return WSAEPROVIDERFAILEDINIT;
 	}
 	// 导入下层提供程序的WSPStartup函数
@@ -140,7 +167,8 @@ int WSPAPI WSPStartup(
 	pfnWSPStartup = (LPWSPSTARTUP)::GetProcAddress(hModule, "WSPStartup");
 	if(pfnWSPStartup == NULL)
 	{
-		ODS1(L" WSPStartup: GetProcAddress() failed %d \n", ::GetLastError());
+		sprintf(temp, " WSPStartup: GetProcAddress() failed %d \n", ::GetLastError());
+		WriteFile(hFile, (LPCVOID)temp,strlen(temp), NULL, NULL);
 		return WSAEPROVIDERFAILEDINIT;
 	}
 	
@@ -151,7 +179,8 @@ int WSPAPI WSPStartup(
 	int nRet = pfnWSPStartup(wVersionRequested, lpWSPData, pInfo, UpcallTable, lpProcTable);
 	if (nRet != ERROR_SUCCESS)
 	{
-		ODS1(L" WSPStartup: underlying provider's WSPStartup() failed %d \n", nRet);
+		sprintf(temp, " WSPStartup: underlying provider's WSPStartup() failed %d \n", nRet);
+		WriteFile(hFile, (LPCVOID)temp,strlen(temp), NULL, NULL);
 		return nRet;
 	}
 
