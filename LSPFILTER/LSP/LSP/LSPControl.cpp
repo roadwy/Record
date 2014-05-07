@@ -51,11 +51,11 @@ void view()
 	LPWSAPROTOCOL_INFOW pProtoInfo;
 	int nProtocols;
 	pProtoInfo = GetProvider(&nProtocols);
-	printf("\n   -------------------   已安装的LSP   -------------------   \n\n");
+	printf("\n==================已安装的LSP==================\n\n");
 	for(int i=0; i<nProtocols; i++)
 	{
 		printf(" Protocol: %ws \n", pProtoInfo[i].szProtocol);
 		printf(" CatalogEntryId: %d   ChainLen: %d \n\n", pProtoInfo[i].dwCatalogEntryId, pProtoInfo[i].ProtocolChain.ChainLen);
 	}
-	printf("\n   -------------------   已安装的LSP   -------------------   \n\n");
+	printf("\n==================已安装的LSP==================\n\n");
 }

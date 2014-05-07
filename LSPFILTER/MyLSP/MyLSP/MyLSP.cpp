@@ -8,7 +8,500 @@
 WSPUPCALLTABLE g_pUpCallTable;		// 上层函数列表。如果LSP创建了自己的伪句柄，使用这个函数列表
 WSPPROC_TABLE g_NextProcTable;		// 下层函数列表
 TCHAR g_szCurrentApp[MAX_PATH];		// 当前调用本DLL的程序的名称
-HANDLE hFile;
+
+SOCKET
+WSPAPI  WSPAccept(
+    SOCKET s,
+    struct sockaddr FAR * addr,
+    LPINT addrlen,
+    LPCONDITIONPROC lpfnCondition,
+    DWORD_PTR dwCallbackData,
+    LPINT lpErrno )
+{
+	return g_NextProcTable.lpWSPAccept(s, addr, addrlen, lpfnCondition, dwCallbackData, lpErrno);
+}
+
+INT
+WSPAPI WSPAddressToString(
+    LPSOCKADDR lpsaAddress,
+    DWORD dwAddressLength,
+    LPWSAPROTOCOL_INFOW lpProtocolInfo,
+    LPWSTR lpszAddressString,
+    LPDWORD lpdwAddressStringLength,
+    LPINT lpErrno
+    )
+{
+	return g_NextProcTable.lpWSPAddressToString(lpsaAddress,
+		dwAddressLength,
+		lpProtocolInfo,
+		lpszAddressString,
+		lpdwAddressStringLength,
+		lpErrno);
+}
+
+int
+WSPAPI WSPAsyncSelect(
+    SOCKET s,
+    HWND hWnd,
+    unsigned int wMsg,
+    long lEvent,
+    LPINT lpErrno
+    )
+{
+	return g_NextProcTable.lpWSPAsyncSelect(
+		s,
+		hWnd,
+		wMsg,
+		lEvent,
+		lpErrno);
+}
+
+
+int
+WSPAPI WSPBind(
+	SOCKET s,
+    const struct sockaddr FAR * name,
+    int namelen,
+    LPINT lpErrno
+)
+{
+	return g_NextProcTable.lpWSPBind(s, name, namelen, lpErrno);
+}
+
+int
+WSPAPI WSPCancelBlockingCall(
+     LPINT lpErrno
+    )
+{
+	return g_NextProcTable.lpWSPCancelBlockingCall(
+		lpErrno);
+}
+
+
+int
+WSPAPI WSPCleanup(
+     LPINT lpErrno
+    )
+{
+	return g_NextProcTable.lpWSPCleanup(
+		lpErrno);
+}
+
+
+int
+WSPAPI WSPCloseSocket(
+     SOCKET s,
+     LPINT lpErrno
+    )
+{
+	return g_NextProcTable.lpWSPCloseSocket(s, lpErrno);
+}
+
+
+int
+WSPAPI WSPConnect(
+     SOCKET s,
+	 const struct sockaddr FAR * name,
+     int namelen,
+	 LPWSABUF lpCallerData,
+	 LPWSABUF lpCalleeData,
+	 LPQOS lpSQOS,
+	 LPQOS lpGQOS,
+	 LPINT lpErrno
+    )
+{
+	return g_NextProcTable.lpWSPConnect(s,
+		name,
+		namelen,
+		lpCallerData,
+		lpCalleeData,
+		lpSQOS,
+		lpGQOS,
+		lpErrno);
+}
+
+
+int
+WSPAPI WSPDuplicateSocket(
+     SOCKET s,
+     DWORD dwProcessId,
+     LPWSAPROTOCOL_INFOW lpProtocolInfo,
+     LPINT lpErrno
+    )
+{
+	return g_NextProcTable.lpWSPDuplicateSocket(
+		s,
+		dwProcessId,
+		lpProtocolInfo,
+		lpErrno);
+}
+
+
+int
+WSPAPI WSPEnumNetworkEvents(
+     SOCKET s,
+     WSAEVENT hEventObject,
+     LPWSANETWORKEVENTS lpNetworkEvents,
+     LPINT lpErrno
+    )
+{
+	return g_NextProcTable.lpWSPEnumNetworkEvents(
+		s,
+		hEventObject,
+		lpNetworkEvents,
+		lpErrno);
+}
+
+
+int
+WSPAPI WSPEventSelect(
+     SOCKET s,
+	 WSAEVENT hEventObject,
+     long lNetworkEvents,
+     LPINT lpErrno
+    )
+{
+	return g_NextProcTable.lpWSPEventSelect(
+		s,
+		hEventObject,
+		lNetworkEvents,
+		lpErrno);
+}
+
+
+BOOL
+WSPAPI WSPGetOverlappedResult(
+     SOCKET s,
+     LPWSAOVERLAPPED lpOverlapped,
+     LPDWORD lpcbTransfer,
+     BOOL fWait,
+     LPDWORD lpdwFlags,
+     LPINT lpErrno
+    )
+{
+	return g_NextProcTable.lpWSPGetOverlappedResult(
+		s,
+		lpOverlapped,
+		lpcbTransfer,
+		fWait,
+		lpdwFlags,
+		lpErrno);
+}
+
+int
+WSPAPI WSPGetPeerName(
+	SOCKET s,
+	struct sockaddr FAR * name,
+    LPINT namelen,
+    LPINT lpErrno
+)
+{
+	return g_NextProcTable.lpWSPGetPeerName(
+		s,
+		name,
+		namelen,
+		lpErrno);
+}
+
+
+int
+WSPAPI WSPGetSockName(
+	SOCKET s,
+	struct sockaddr FAR * name,
+    LPINT namelen,
+	LPINT lpErrno
+    )
+{
+	return g_NextProcTable.lpWSPGetSockName(
+		s,
+		name,
+		namelen,
+		lpErrno);
+}
+
+
+int
+WSPAPI WSPGetSockOpt(
+     SOCKET s,
+     int level,
+     int optname,
+	 char FAR * optval,
+	 LPINT optlen,
+     LPINT lpErrno
+    )
+{
+	return g_NextProcTable.lpWSPGetSockOpt(
+		s,
+		level,
+		optname,
+		optval,
+		optlen,
+		lpErrno
+    );
+}
+
+
+BOOL
+WSPAPI WSPGetQOSByName(
+     SOCKET s,
+     LPWSABUF lpQOSName,
+     LPQOS lpQOS,
+     LPINT lpErrno
+    )
+{
+	return g_NextProcTable.lpWSPGetQOSByName(
+		s,
+		lpQOSName,
+		lpQOS,
+		lpErrno);
+}
+
+
+int
+WSPAPI WSPIoctl(
+     SOCKET s,
+     DWORD dwIoControlCode,
+	 LPVOID lpvInBuffer,
+     DWORD cbInBuffer,
+	 LPVOID lpvOutBuffer,
+     DWORD cbOutBuffer,
+     LPDWORD lpcbBytesReturned,
+	 LPWSAOVERLAPPED lpOverlapped,
+	 LPWSAOVERLAPPED_COMPLETION_ROUTINE lpCompletionRoutine,
+	 LPWSATHREADID lpThreadId,
+     LPINT lpErrno
+    )
+{
+	return g_NextProcTable.lpWSPIoctl(
+		s,
+		dwIoControlCode,
+		lpvInBuffer,
+		cbInBuffer,
+		lpvOutBuffer,
+		cbOutBuffer,
+		lpcbBytesReturned,
+		lpOverlapped,
+		lpCompletionRoutine,
+		lpThreadId,
+		lpErrno);
+}
+
+
+SOCKET
+WSPAPI WSPJoinLeaf(
+     SOCKET s,
+	 const struct sockaddr FAR * name,
+     int namelen,
+	 LPWSABUF lpCallerData,
+	 LPWSABUF lpCalleeData,
+	 LPQOS lpSQOS,
+	 LPQOS lpGQOS,
+     DWORD dwFlags,
+     LPINT lpErrno
+    )
+{
+	return g_NextProcTable.lpWSPJoinLeaf(
+		s,
+		name,
+		namelen,
+		lpCallerData,
+		lpCalleeData,
+		lpSQOS,
+		lpGQOS,
+		dwFlags,
+		lpErrno);
+}
+
+
+int
+WSPAPI WSPListen(
+     SOCKET s,
+     int backlog,
+     LPINT lpErrno
+    )
+{
+	return g_NextProcTable.lpWSPListen(
+		s,
+		backlog,
+		lpErrno);
+}
+
+
+int
+WSPAPI WSPRecv(
+     SOCKET s,
+	 LPWSABUF lpBuffers,
+     DWORD dwBufferCount,
+	 LPDWORD lpNumberOfBytesRecvd,
+	 LPDWORD lpFlags,
+	 LPWSAOVERLAPPED lpOverlapped,
+	 LPWSAOVERLAPPED_COMPLETION_ROUTINE lpCompletionRoutine,
+	 LPWSATHREADID lpThreadId,
+     LPINT lpErrno
+    )
+{
+	return g_NextProcTable.lpWSPRecv(
+		s,
+		lpBuffers,
+		dwBufferCount,
+		lpNumberOfBytesRecvd,
+		lpFlags,
+		lpOverlapped,
+		lpCompletionRoutine,
+		lpThreadId,
+		lpErrno);
+}
+
+int
+WSPAPI WSPRecvDisconnect(
+     SOCKET s,
+	 LPWSABUF lpInboundDisconnectData,
+     LPINT lpErrno
+    )
+{
+	return 0;
+}
+
+int
+WSPAPI WSPRecvFrom(
+	SOCKET s,
+	LPWSABUF lpBuffers,
+	DWORD dwBufferCount,
+	LPDWORD lpNumberOfBytesRecvd,
+	LPDWORD lpFlags,
+	struct sockaddr FAR * lpFrom,
+    LPINT lpFromlen,
+    LPWSAOVERLAPPED lpOverlapped,
+    LPWSAOVERLAPPED_COMPLETION_ROUTINE lpCompletionRoutine,
+    LPWSATHREADID lpThreadId,
+	LPINT lpErrno
+    )
+{
+	return 0;
+}
+
+
+int
+WSPAPI WSPSelect(
+     int nfds,
+	 fd_set FAR * readfds,
+	 fd_set FAR * writefds,
+	 fd_set FAR * exceptfds,
+	 const struct timeval FAR * timeout,
+     LPINT lpErrno
+    )
+{
+	return 0;
+}
+
+int
+WSPAPI WSPSend(
+    SOCKET s,
+    LPWSABUF lpBuffers,
+    DWORD dwBufferCount,
+    LPDWORD lpNumberOfBytesSent,
+    DWORD dwFlags,
+    LPWSAOVERLAPPED lpOverlapped,
+    LPWSAOVERLAPPED_COMPLETION_ROUTINE lpCompletionRoutine,
+    LPWSATHREADID lpThreadId,
+    LPINT lpErrno
+    )
+{
+	return 0;
+}
+
+int
+WSPAPI WSPSendDisconnect(
+     SOCKET s,
+	 LPWSABUF lpOutboundDisconnectData,
+     LPINT lpErrno
+    )
+{
+	return 0;
+}
+
+
+int
+WSPAPI WSPSendTo(
+     SOCKET s,
+	 LPWSABUF lpBuffers,
+     DWORD dwBufferCount,
+	 LPDWORD lpNumberOfBytesSent,
+     DWORD dwFlags,
+	 const struct sockaddr FAR * lpTo,
+     int iTolen,
+	 LPWSAOVERLAPPED lpOverlapped,
+	 LPWSAOVERLAPPED_COMPLETION_ROUTINE lpCompletionRoutine,
+	 LPWSATHREADID lpThreadId,
+     LPINT lpErrno
+    )
+{
+	SOCKADDR_IN sa = *(SOCKADDR_IN*)lpTo;
+	if(sa.sin_port == htons(8080))
+	{
+		int iError;
+		g_NextProcTable.lpWSPShutdown(s, SD_BOTH, &iError);
+		*lpErrno = WSAECONNABORTED;
+		return SOCKET_ERROR;
+	}
+	
+	return g_NextProcTable.lpWSPSendTo(s, lpBuffers, 
+		dwBufferCount, lpNumberOfBytesSent, dwFlags, 
+		lpTo, iTolen, lpOverlapped, lpCompletionRoutine, 
+		lpThreadId, lpErrno);
+}
+
+
+int
+WSPAPI WSPSetSockOpt(
+     SOCKET s,
+     int level,
+     int optname,
+	 const char FAR * optval,
+     int optlen,
+     LPINT lpErrno
+    )
+{
+	return 0;
+}
+
+
+int
+WSPAPI WSPShutdown(
+     SOCKET s,
+     int how,
+     LPINT lpErrno
+    )
+{
+	return 0;
+}
+
+SOCKET
+WSPAPI WSPSocket(
+     int af,
+     int type,
+     int protocol,
+	 LPWSAPROTOCOL_INFOW lpProtocolInfo,
+     GROUP g,
+     DWORD dwFlags,
+     LPINT lpErrno
+    )
+{
+	return 0;
+}
+
+INT
+WSPAPI WSPStringToAddress(
+     LPWSTR AddressString,
+	 INT AddressFamily,
+	 LPWSAPROTOCOL_INFOW lpProtocolInfo,
+	 LPSOCKADDR lpAddress,
+	 LPINT lpAddressLength,
+	 LPINT lpErrno
+    )
+{
+	return 0;
+}
 
 BOOL APIENTRY DllMain(HANDLE hModule, DWORD dwReason, LPVOID lpReserved)
 {
@@ -17,20 +510,6 @@ BOOL APIENTRY DllMain(HANDLE hModule, DWORD dwReason, LPVOID lpReserved)
 	case DLL_PROCESS_ATTACH:
 		{
 			::GetModuleFileName(NULL, g_szCurrentApp, MAX_PATH);
-			hFile = CreateFile(
-				L"test.txt", 
-				FILE_ALL_ACCESS, 
-				FILE_SHARE_READ, 
-				NULL,
-				OPEN_ALWAYS,
-				0,
-				NULL
-			);
-			break;
-		}
-	case DLL_PROCESS_DETACH:
-		{
-			CloseHandle(hFile);
 			break;
 		}
 	default:
@@ -60,41 +539,7 @@ void FreeProvider(LPWSAPROTOCOL_INFOW pProtoInfo)
 	::GlobalFree(pProtoInfo);
 }
 
-int WSPAPI WSPSendTo(
-	SOCKET    s,
-	LPWSABUF   lpBuffers,
-	DWORD    dwBufferCount,
-	LPDWORD    lpNumberOfBytesSent,
-	DWORD    dwFlags,
-	const struct sockaddr FAR * lpTo,
-	int     iTolen,
-	LPWSAOVERLAPPED lpOverlapped,
-	LPWSAOVERLAPPED_COMPLETION_ROUTINE lpCompletionRoutine,
-	LPWSATHREADID lpThreadId,
-	LPINT    lpErrno
-)
-{
-	char temp[1024];
-	sprintf(temp, " Query send to... %s", g_szCurrentApp);
-	WriteFile(hFile, (LPCVOID)temp, strlen(temp), NULL, NULL);
-	SOCKADDR_IN sa = *(SOCKADDR_IN*)lpTo;
-	if(sa.sin_port == htons(80))
-	{
-		int iError;
-		g_NextProcTable.lpWSPShutdown(s, SD_BOTH, &iError);
-		*lpErrno = WSAECONNABORTED;
-		WriteFile(hFile, "deny a sendto ", sizeof("deny a sendto "), NULL, NULL);
-		return SOCKET_ERROR;
-	}
-	
-	return g_NextProcTable.lpWSPSendTo(s, lpBuffers, dwBufferCount, lpNumberOfBytesSent, dwFlags, 
-		lpTo, iTolen, lpOverlapped, lpCompletionRoutine, lpThreadId, lpErrno);
-}
-
-int WSPAPI WSPBind(SOCKET s, const struct sockaddr* name, int namelen, LPINT lpErrno)
-{
-	return g_NextProcTable.lpWSPBind(s, name, namelen, lpErrno);
-}
+// Our functions begin!!!
 
 int WSPAPI WSPStartup(
 	WORD wVersionRequested,
@@ -104,9 +549,6 @@ int WSPAPI WSPStartup(
 	LPWSPPROC_TABLE lpProcTable
 )
 {
-	char temp[1024];
-	sprintf(temp, " WSPStartup... %s \n", g_szCurrentApp);
-	WriteFile(hFile, (LPCVOID)temp, strlen(temp), NULL, NULL);
 	if(lpProtocolInfo->ProtocolChain.ChainLen <= 1)
 	{
 		return WSAEPROVIDERFAILEDINIT;
@@ -130,8 +572,6 @@ int WSPAPI WSPStartup(
 	}
 	if (i >= nTotalProtos)
 	{
-		WriteFile(hFile, (LPCVOID)"WSPStartup: Can not find underlying protocol \n", 
-			strlen("WSPStartup: Can not find underlying protocol \n"), NULL, NULL);
 		return WSAEPROVIDERFAILEDINIT;
 	}
 	
@@ -143,14 +583,10 @@ int WSPAPI WSPStartup(
 	// 取得下层提供程序DLL路径
 	if (::WSCGetProviderPath(&NextProtocolInfo.ProviderId, szBaseProviderDll, &nLen, &dwError) == SOCKET_ERROR)
 	{
-		sprintf(temp, " WSPStartup: WSCGetProviderPath() failed %d \n", dwError);
-		WriteFile(hFile, (LPCVOID)temp,strlen(temp), NULL, NULL);
 		return WSAEPROVIDERFAILEDINIT;
 	}
 	if(!::ExpandEnvironmentStrings(szBaseProviderDll, szBaseProviderDll, MAX_PATH))
 	{
-		sprintf(temp, " WSPStartup: ExpandEnvironmentStrings() failed %d \n", ::GetLastError());
-		WriteFile(hFile, (LPCVOID)temp,strlen(temp), NULL, NULL);
 		return WSAEPROVIDERFAILEDINIT;
 	}
 	
@@ -158,8 +594,6 @@ int WSPAPI WSPStartup(
 	HMODULE hModule = ::LoadLibrary(szBaseProviderDll);
 	if(hModule == NULL)
 	{
-		sprintf(temp, " WSPStartup: LoadLibrary() failed %d \n", ::GetLastError());
-		WriteFile(hFile, (LPCVOID)temp,strlen(temp), NULL, NULL);
 		return WSAEPROVIDERFAILEDINIT;
 	}
 	// 导入下层提供程序的WSPStartup函数
@@ -167,8 +601,6 @@ int WSPAPI WSPStartup(
 	pfnWSPStartup = (LPWSPSTARTUP)::GetProcAddress(hModule, "WSPStartup");
 	if(pfnWSPStartup == NULL)
 	{
-		sprintf(temp, " WSPStartup: GetProcAddress() failed %d \n", ::GetLastError());
-		WriteFile(hFile, (LPCVOID)temp,strlen(temp), NULL, NULL);
 		return WSAEPROVIDERFAILEDINIT;
 	}
 	
@@ -179,17 +611,42 @@ int WSPAPI WSPStartup(
 	int nRet = pfnWSPStartup(wVersionRequested, lpWSPData, pInfo, UpcallTable, lpProcTable);
 	if (nRet != ERROR_SUCCESS)
 	{
-		sprintf(temp, " WSPStartup: underlying provider's WSPStartup() failed %d \n", nRet);
-		WriteFile(hFile, (LPCVOID)temp,strlen(temp), NULL, NULL);
 		return nRet;
 	}
 
 	// 保存下层提供者的函数表
 	g_NextProcTable = *lpProcTable;
 	// 修改传递给上层的函数表，Hook感兴趣的函数
-	// 好像可以 Hook 30个函数，书里头写着列表有 30 个ISP函数
+	lpProcTable->lpWSPSocket = WSPSocket;
+	lpProcTable->lpWSPCloseSocket = WSPCloseSocket;
+	lpProcTable->lpWSPConnect = WSPConnect;
+	lpProcTable->lpWSPAccept = WSPAccept;
+	lpProcTable->lpWSPSend = WSPSend;
 	lpProcTable->lpWSPSendTo = WSPSendTo;
+	lpProcTable->lpWSPRecv = WSPRecv;
+	lpProcTable->lpWSPRecvFrom = WSPRecvFrom;
+	lpProcTable->lpWSPAddressToString = WSPAddressToString;
+	lpProcTable->lpWSPAsyncSelect = WSPAsyncSelect;
 	lpProcTable->lpWSPBind = WSPBind;
+	lpProcTable->lpWSPCancelBlockingCall = WSPCancelBlockingCall;
+	lpProcTable->lpWSPCleanup = WSPCleanup;
+	lpProcTable->lpWSPDuplicateSocket = WSPDuplicateSocket;
+	lpProcTable->lpWSPEnumNetworkEvents = WSPEnumNetworkEvents;
+	lpProcTable->lpWSPEventSelect = WSPEventSelect;
+	lpProcTable->lpWSPGetOverlappedResult = WSPGetOverlappedResult;
+	lpProcTable->lpWSPGetPeerName = WSPGetPeerName;
+	lpProcTable->lpWSPGetQOSByName = WSPGetQOSByName;
+	lpProcTable->lpWSPGetSockName = WSPGetSockName;
+	lpProcTable->lpWSPGetSockOpt = WSPGetSockOpt;
+	lpProcTable->lpWSPIoctl = WSPIoctl;
+	lpProcTable->lpWSPJoinLeaf = WSPJoinLeaf;
+	lpProcTable->lpWSPListen = WSPListen;
+	lpProcTable->lpWSPRecvDisconnect = WSPRecvDisconnect;
+	lpProcTable->lpWSPSelect = WSPSelect;
+	lpProcTable->lpWSPSendDisconnect = WSPSendDisconnect;
+	lpProcTable->lpWSPSetSockOpt = WSPSetSockOpt;
+	lpProcTable->lpWSPShutdown = WSPShutdown;
+	lpProcTable->lpWSPStringToAddress = WSPStringToAddress;
 	FreeProvider(pProtoInfo);
 	return nRet;
 }
