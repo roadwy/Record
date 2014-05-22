@@ -17,8 +17,31 @@ NTSTATUS InstallUserModeApc(LPSTR lpProcess, ULONG pTargetThread, ULONG pTargetP
 void ApcCreateProcess(PVOID NormalContext, PVOID SystemArgument1, PVOID SystemArgument2);
 void ApcCreateProcessEnd();
 
+ULONG ActiveProcessLinksOffset = 0x88;
+ULONG ImageFileNameOffset = 0x174;    
+ULONG ThreadListHeadOffset = 0x50;
+ULONG ThreadListEntryOffset = 0x1B0;
+ULONG AltertableOffset = 0x164;
+ULONG WinExecOffset = 0x7C8623AD;
+
+void DependVersion()
+{
+	ULONG MajorVersion, MinorVersion;
+	PsGetVersion(&MajorVersion, &MinorVersion, NULL, NULL);
+	if (MajorVersion == 6)
+	{
+		WinExecOffset = 0x77E6E5FD;
+		ActiveProcessLinksOffset = 0xb8;
+		ImageFileNameOffset = 0x16C;
+		ThreadListHeadOffset = 0x190;
+		ThreadListEntryOffset = 0x1e0;
+		AltertableOffset = 0x3C;
+	}
+}
+
 void RunProcess(LPSTR lpProcess)
 {
+	ULONG Alert;
 	char *name;
 	ULONG pTargetProcess;
 	ULONG pTargetThread;
@@ -35,7 +58,7 @@ void RunProcess(LPSTR lpProcess)
 		return;
 	}
 
-	pListHead = pSystemProcess + 0x88;
+	pListHead = pSystemProcess + ActiveProcessLinksOffset;
 	pNextEntry = *(ULONG*)pListHead;
 	if (!pNextEntry)
 	{
@@ -45,23 +68,31 @@ void RunProcess(LPSTR lpProcess)
 	
 	while (pNextEntry != pListHead)
 	{
-		pSystemProcess = pNextEntry - 0x88;
-		name = (char *)pSystemProcess + 0x174;
+		pSystemProcess = pNextEntry - ActiveProcessLinksOffset;
+		name = (char *)pSystemProcess + ImageFileNameOffset;
 		DbgPrint("ProcessName %s\n", name);
-		if (_strnicmp(name, "windbg.exe", 12) == 0)
+		if (_strnicmp(name, "explorer.exe", 12) == 0)
 		{
 			pTargetProcess = pSystemProcess;
 			DbgPrint("Found explorer.exe!\n");
 			pTargetThread = pNotAlertableThread = 0;
-			pThreadListHead = pSystemProcess + 0x50;
+			pThreadListHead = pSystemProcess + ThreadListHeadOffset;
 			pThreadNextEntry = *(ULONG*)pThreadListHead;
 			while (pThreadNextEntry != pThreadListHead)
 			{
-				pTempThread = pThreadNextEntry - 0x1b0;
+				pTempThread = pThreadNextEntry - ThreadListEntryOffset;
 				DbgPrint("ETHREAD address is : 0x%08x\n", (ULONG*)pTempThread);
-				DbgPrint("Thread ID is : %d\n", *(ULONG*)(pTempThread + 0x1f0));
-				DbgPrint("Alertable is : 0x%08x", *(char*)(pTempThread + 0x164));
-				if (*(char*)(pTempThread + 0x164))
+				DbgPrint("Alertable is : 0x%08x", *(char*)(pTempThread + AltertableOffset));
+
+				if (AltertableOffset == 0x164)
+				{
+					Alert = *(char*)(pTempThread + AltertableOffset);
+				}
+				else
+				{
+					Alert = (*(char*)(pTempThread + AltertableOffset)) & (1<<8);
+				}
+				if (Alert)
 				{
 					pTargetThread = pTempThread;
 					DbgPrint("Found alertable thread!\n");
@@ -176,6 +207,7 @@ NTSTATUS InstallUserModeApc(LPSTR lpProcess, ULONG pTargetThread, ULONG pTargetP
 	dwMappedAddress = (ULONG)pMappedAddress;
 	memset((unsigned char*)pMappedAddress + 0x14, 0, 50);
 	memcpy((unsigned char*)pMappedAddress + 0x14, lpProcess, strlen(lpProcess));
+	memcpy((unsigned char*)pMappedAddress + 0x1, &WinExecOffset, sizeof(ULONG));
 
 	data_addr = (ULONG *)((char*)pMappedAddress + 0x9);
 	*data_addr = dwMappedAddress + 0x14;

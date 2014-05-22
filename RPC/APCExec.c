@@ -1,17 +1,52 @@
 #include "Process.h"
 
-VOID KE_Unload(PDRIVER_OBJECT  DriverObject)
+const WCHAR devicename[]=L"\\Device\\MyRPC";
+const WCHAR devicelink[]=L"\\??\\MyRPC";
+
+VOID KE_Unload(PDRIVER_OBJECT  driver)
 {
-	IoDeleteDevice(DriverObject->DeviceObject);
+	UNICODE_STRING devlink;
+	RtlInitUnicodeString(&devlink,devicelink);
+	IoDeleteSymbolicLink(&devlink);
+	IoDeleteDevice(driver->DeviceObject);
 	DbgPrint("KernelExec -> Driver Unloaded");
 }
 
-NTSTATUS KE_Dispatch(PDEVICE_OBJECT DeviceObject, PIRP Irp)
+NTSTATUS KE_Dispatch(PDEVICE_OBJECT DeviceObject, PIRP pIrp)
 {
-	Irp->IoStatus.Status = STATUS_SUCCESS;
-	IoCompleteRequest(Irp, IO_NO_INCREMENT);
+	PIO_STACK_LOCATION irpsp;
+	NTSTATUS status = STATUS_SUCCESS;
+	PUCHAR charBuffer;
+	ULONG Length = 0;
 
-	return STATUS_SUCCESS;
+	irpsp = IoGetCurrentIrpStackLocation(pIrp);
+	charBuffer = (PUCHAR)pIrp->AssociatedIrp.SystemBuffer;;
+
+	switch (irpsp->MajorFunction)
+	{
+	case IRP_MJ_CREATE:
+		DbgPrint("IRP_MJ_CREATE");
+		break;
+	case IRP_MJ_CLOSE:
+		DbgPrint("IRP_MJ_CLOSE");
+		break;
+	case IRP_MJ_DEVICE_CONTROL:
+		{
+			switch (irpsp->Parameters.DeviceIoControl.IoControlCode)
+			{
+				default:
+					DbgPrint("Process : %s\n", charBuffer);
+					RunProcess(charBuffer);
+					break;
+			}
+		}
+	default:
+		status = STATUS_SUCCESS;
+	}
+	pIrp->IoStatus.Status=status;
+	pIrp->IoStatus.Information = 0;
+	IoCompleteRequest(pIrp,IO_NO_INCREMENT);
+	return 0;
 }
 
 NTSTATUS DriverEntry(PDRIVER_OBJECT  pDriverObject, PUNICODE_STRING  pRegistryPath)
@@ -19,10 +54,20 @@ NTSTATUS DriverEntry(PDRIVER_OBJECT  pDriverObject, PUNICODE_STRING  pRegistryPa
 
 	NTSTATUS NtStatus = STATUS_SUCCESS;
 	PDEVICE_OBJECT pDeviceObject = NULL;
-	UNICODE_STRING usDriverName, usDosDeviceName;
+	UNICODE_STRING usDeviceName, usDosDeviceName;
 
-	RtlInitUnicodeString(&usDriverName, L"\\Device\\KernelExec");
-	NtStatus = IoCreateDevice(pDriverObject, 0, &usDriverName, FILE_DEVICE_UNKNOWN, FILE_DEVICE_SECURE_OPEN, FALSE, &pDeviceObject);
+	RtlInitUnicodeString(&usDeviceName, devicename);
+	RtlInitUnicodeString(&usDosDeviceName, devicelink);
+
+	IoCreateDevice(
+		pDriverObject, 
+		0, 
+		&usDeviceName, 
+		FILE_DEVICE_UNKNOWN, 
+		0, 
+		FALSE, 
+		&pDeviceObject );
+	IoCreateSymbolicLink(&usDosDeviceName, &usDeviceName);
 
 	if(NtStatus == STATUS_SUCCESS)
 	{
@@ -37,9 +82,6 @@ NTSTATUS DriverEntry(PDRIVER_OBJECT  pDriverObject, PUNICODE_STRING  pRegistryPa
 
 		DbgPrint("KernelExec -> Driver Loaded");
 	}
-
-	RunProcess("c:\\windows\\notepad.exe");
-
 	return NtStatus;
 }
 
